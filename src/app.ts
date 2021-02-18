@@ -6,17 +6,17 @@ import 'reflect-metadata'
 import path from 'path'
 
 //  import routes
-
+import userRouter from './routes/user.routes'
 
 export class App {
     app: express.Application
 
     constructor(private port?: number | string) {
-        createConnection()
         this.app = express()
         this.middleware()
         this.routes()
         this.settings()
+        createConnection()
     }
 
     settings() {
@@ -29,7 +29,7 @@ export class App {
     }
 
     routes() {
-
+        this.app.use('/user/', userRouter)
     }
 
     async listen() {
