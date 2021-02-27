@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { user } from '../entity/user'
-import { Any, getRepository } from 'typeorm'
+import { getRepository } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 
 /**
@@ -11,8 +11,7 @@ import * as bcrypt from 'bcrypt'
 export async function crearUsuario(req: Request, res: Response): Promise<any> {
 
     try {
-        let usuario = req.query
-        console.log(usuario)
+        let usuario = req.body
         const validEmail = await getRepository(user)
             .find({ where: { email: usuario.email } })
             .catch(err => {
@@ -47,7 +46,7 @@ export async function crearUsuario(req: Request, res: Response): Promise<any> {
                 .save(usuario)
                 .then((newUser) => {
                     res.json({
-                        status: "OK",
+                        status: "Ok",
                         msg: "Se registro correctamente.",
                         user: newUser
                     })
@@ -68,6 +67,43 @@ export async function crearUsuario(req: Request, res: Response): Promise<any> {
 
 }
 
+/**
+ * *Genera la contraseña con bcrypt
+ * @param textPlano contraseña plana
+ * @param salt saltos para generar la clave
+ */
 export default async function generarContraseña(textPlano: any, salt: number): Promise<string> {
     return bcrypt.hashSync(textPlano, salt)
+}
+
+/**
+ * *Obtiene el usuario logeado
+ * @param req 
+ * @param res 
+ */
+export async function getUserLog(req: Request | any, res: Response): Promise<any> {
+
+    if (req?.userId?.id != null) {
+        try {
+            await getRepository(user)
+                .find({ where: { id: req.userId.id } })
+                .then((result) => {
+                    res.json({ status: "Ok", user: result[0] })
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        } catch (error) {
+            console.error(error);
+            res.status(400).json({
+                error: error
+            })
+        }
+    }
+    else {
+        res.json({
+            status: "Ok",
+            user: null
+        })
+    }
 }

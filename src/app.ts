@@ -7,6 +7,8 @@ import path from 'path'
 
 //  import routes
 import userRouter from './routes/user.routes'
+import authRouter from './routes/aurh.routes'
+import todoRouter from './routes/todo.routes'
 
 export class App {
     app: express.Application
@@ -30,6 +32,8 @@ export class App {
 
     routes() {
         this.app.use('/user/', userRouter)
+        this.app.use('/auth/', authRouter)
+        this.app.use('/todo/', todoRouter)
     }
 
     async listen() {
