@@ -65,6 +65,11 @@ export async function addTodo(req: Request, res: Response): Promise<any> {
     }
 }
 
+/**
+ * 
+ * @param req 
+ * @param res 
+ */
 export async function updateTodo(req: Request, res: Response): Promise<any> {
     try {
         const { id, titulo, descripcion, progreso } = req.body

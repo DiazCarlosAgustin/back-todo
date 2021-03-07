@@ -1,15 +1,13 @@
 import { Router } from 'express'
-import { getTodosByUser, addTodo, updateTodo } from '../controllers/todoController'
+import { getFriends, addFriend } from '../controllers/friendsController'
 import { isLog } from '../controllers/authController'
 
 const router = Router()
 
 router.use(isLog);
-router.route("/")
-    .put(updateTodo)
-    .post(addTodo)
 router.route("/:id")
-    .get(getTodosByUser)
-
+    .get(getFriends)
+router.route("/")
+    .post(addFriend)
 
 export default router

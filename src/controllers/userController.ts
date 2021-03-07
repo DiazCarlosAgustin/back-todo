@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { user } from '../entity/user'
-import { getRepository } from 'typeorm'
+import { createQueryBuilder, getRepository } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 
 /**
@@ -106,4 +106,30 @@ export async function getUserLog(req: Request | any, res: Response): Promise<any
             user: null
         })
     }
+}
+
+/**
+ * 
+ * @param req 
+ * @param res 
+ */
+export async function getUsersToAdd(req: Request, res: Response): Promise<any> {
+    try {
+        const id = req.params.id
+        await createQueryBuilder('user')
+            .where('id != :id', { id: id })
+            .getMany()
+            .then(result => {
+                res.json({
+                    status: "Ok",
+                    users: result
+                })
+            })
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            error
+        })
+    }
+
 }

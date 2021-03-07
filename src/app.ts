@@ -9,6 +9,7 @@ import path from 'path'
 import userRouter from './routes/user.routes'
 import authRouter from './routes/aurh.routes'
 import todoRouter from './routes/todo.routes'
+import FriendRouter from './routes/friend.routes'
 
 export class App {
     app: express.Application
@@ -34,6 +35,7 @@ export class App {
         this.app.use('/user/', userRouter)
         this.app.use('/auth/', authRouter)
         this.app.use('/todo/', todoRouter)
+        this.app.use('/friend/', FriendRouter)
     }
 
     async listen() {
