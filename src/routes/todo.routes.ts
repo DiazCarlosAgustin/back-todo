@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getTodosByUser, addTodo, updateTodo } from '../controllers/todoController'
+import { getTodosByUser, addTodo, updateTodo, deleteTodo } from '../controllers/todoController'
 import { isLog } from '../controllers/authController'
 
 const router = Router()
@@ -10,6 +10,7 @@ router.route("/")
     .post(addTodo)
 router.route("/:id")
     .get(getTodosByUser)
+    .delete(deleteTodo)
 
 
 export default router

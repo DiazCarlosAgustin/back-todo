@@ -32,7 +32,7 @@ export async function isLog(req: Request | any, res: Response, next: NextFunctio
  * @param req 
  * @param res 
  */
-export async function login(req: Request, res: Response): Promise<void> {
+export async function login(req: Request, res: Response): Promise<any> {
     let { usuario, password } = await req.body
 
     if (!(usuario && password)) {

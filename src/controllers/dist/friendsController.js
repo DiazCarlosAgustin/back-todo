@@ -36,9 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.addFriend = exports.getFriends = void 0;
+exports.updateSolicitud = exports.addFriend = exports.getFriends = void 0;
 var friend_1 = require("../entity/friend");
 var typeorm_1 = require("typeorm");
+var notificacionesController_1 = require("./notificacionesController");
 /**
  *
  * @param req
@@ -82,26 +83,38 @@ function getFriends(req, res) {
     });
 }
 exports.getFriends = getFriends;
+/**
+ *
+ * @param req
+ * @param res
+ */
 function addFriend(req, res) {
     return __awaiter(this, void 0, Promise, function () {
-        var newFriend, existeUnaRelacion, error_2;
+        var newFriend_1, existeUnaRelacion, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 7, , 8]);
-                    newFriend = {
+                    newFriend_1 = {
                         user_id: req.body.user_id,
                         friend_id: req.body.friend_id
                     };
                     return [4 /*yield*/, typeorm_1.getRepository(friend_1.friend)
-                            .find({ where: { user_id: newFriend.user_id, friend_id: newFriend.friend_id } })];
+                            .find({ where: { user_id: newFriend_1.user_id, friend_id: newFriend_1.friend_id } })];
                 case 1:
                     existeUnaRelacion = _a.sent();
-                    if (!(existeUnaRelacion == null)) return [3 /*break*/, 5];
-                    if (!(newFriend.user_id != newFriend.friend_id)) return [3 /*break*/, 3];
+                    if (!(existeUnaRelacion.length == 0)) return [3 /*break*/, 5];
+                    if (!(newFriend_1.user_id != newFriend_1.friend_id)) return [3 /*break*/, 3];
                     return [4 /*yield*/, typeorm_1.getRepository(friend_1.friend)
-                            .save(newFriend)
+                            .save(newFriend_1)
                             .then(function (result) {
+                            var noti = {
+                                user_id: newFriend_1.friend_id,
+                                sendBy: newFriend_1.user_id,
+                                type: "solicitud",
+                                mensaje: "El usuario " + newFriend_1.friend_id + " te envio una solicitud de amistad."
+                            };
+                            notificacionesController_1.addNotificacion(noti);
                             res.json({
                                 status: "Ok",
                                 msg: "Se envio la solicitud al usuario.",
@@ -135,3 +148,42 @@ function addFriend(req, res) {
     });
 }
 exports.addFriend = addFriend;
+/**
+ *
+ * @param req
+ * @param res
+ */
+function updateSolicitud(req, res) {
+    return __awaiter(this, void 0, Promise, function () {
+        var id, error_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    id = req.params.id;
+                    return [4 /*yield*/, typeorm_1.getRepository(friend_1.friend)
+                            .createQueryBuilder("friend")
+                            .update(req.body)
+                            .where("id = :id", { id: id })
+                            .execute()
+                            .then(function (result) {
+                            if (result.raw.affectedRows > 0 && result.raw.warningCount === 0) {
+                                res.json({ "status": "Ok", "msg": "La solicitud fue aceptada correctamente." });
+                            }
+                            else {
+                                res.json({ "status": "Fail", "msg": "Algo ocurrio y no se pudo aceptar la solicitud correctamente, intent nuevamente." });
+                            }
+                        })];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_3 = _a.sent();
+                    res.status(400).json(error_3);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.updateSolicitud = updateSolicitud;

@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, Unique, CreateDateColumn, Updat
 import * as bcrypt from 'bcrypt'
 import { todo } from './todo'
 import { friend } from './friend'
+import { notificacion } from './notificacion';
 // *Tabla/entidad de usuario
 
 @Entity("user")
@@ -23,7 +24,7 @@ export class user {
     @Column()
     email: string;
 
-    @Column({ select: false })
+    @Column()
     private password: string;
 
     @Column()
@@ -42,6 +43,9 @@ export class user {
 
     @OneToMany(() => friend, myFriend => myFriend.friend_id)
     myFriend: friend
+
+    @OneToMany(() => notificacion, notificacion_id => notificacion_id.user_id)
+    notificacion: notificacion
 
     // Funciones
     /**

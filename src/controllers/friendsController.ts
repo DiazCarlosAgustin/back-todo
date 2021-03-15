@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { friend } from '../entity/friend'
 import { createQueryBuilder, getRepository } from 'typeorm'
+import { addNotificacion } from './notificacionesController'
 
 /**
  * 
@@ -34,6 +35,11 @@ export async function getFriends(req: Request, res: Response): Promise<any> {
     }
 }
 
+/**
+ * 
+ * @param req 
+ * @param res 
+ */
 export async function addFriend(req: Request, res: Response): Promise<any> {
     try {
         const newFriend = {
@@ -43,11 +49,18 @@ export async function addFriend(req: Request, res: Response): Promise<any> {
         const existeUnaRelacion = await getRepository(friend)
             .find({ where: { user_id: newFriend.user_id, friend_id: newFriend.friend_id } })
 
-        if (existeUnaRelacion == null) {
+        if (existeUnaRelacion.length == 0) {
             if (newFriend.user_id != newFriend.friend_id) {
                 await getRepository(friend)
                     .save(newFriend)
                     .then(result => {
+                        const noti = {
+                            user_id: newFriend.friend_id,
+                            sendBy: newFriend.user_id,
+                            type: "solicitud",
+                            mensaje: `El usuario ${newFriend.friend_id} te envio una solicitud de amistad.`
+                        }
+                        addNotificacion(noti)
                         res.json({
                             status: "Ok",
                             msg: "Se envio la solicitud al usuario.",
@@ -70,6 +83,34 @@ export async function addFriend(req: Request, res: Response): Promise<any> {
         }
     }
     catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+/**
+ * 
+ * @param req 
+ * @param res 
+ */
+export async function updateSolicitud(req: Request, res: Response): Promise<any> {
+    try {
+        const { id } = req.params
+
+        await getRepository(friend)
+            .createQueryBuilder("friend")
+            .update(req.body)
+            .where("id = :id", { id })
+            .execute()
+            .then(result => {
+                if (result.raw.affectedRows > 0 && result.raw.warningCount === 0) {
+                    res.json({ "status": "Ok", "msg": "La solicitud fue aceptada correctamente." })
+
+                }
+                else {
+                    res.json({ "status": "Fail", "msg": "Algo ocurrio y no se pudo aceptar la solicitud correctamente, intent nuevamente." })
+                }
+            })
+    } catch (error) {
         res.status(400).json(error)
     }
 }

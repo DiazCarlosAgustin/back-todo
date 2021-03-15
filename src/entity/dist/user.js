@@ -11,6 +11,7 @@ var typeorm_1 = require("typeorm");
 var bcrypt = require("bcrypt");
 var todo_1 = require("./todo");
 var friend_1 = require("./friend");
+var notificacion_1 = require("./notificacion");
 // *Tabla/entidad de usuario
 var user = /** @class */ (function () {
     function user() {
@@ -39,7 +40,7 @@ var user = /** @class */ (function () {
         typeorm_1.Column()
     ], user.prototype, "email");
     __decorate([
-        typeorm_1.Column({ select: false })
+        typeorm_1.Column()
     ], user.prototype, "password");
     __decorate([
         typeorm_1.Column(),
@@ -58,6 +59,9 @@ var user = /** @class */ (function () {
     __decorate([
         typeorm_1.OneToMany(function () { return friend_1.friend; }, function (myFriend) { return myFriend.friend_id; })
     ], user.prototype, "myFriend");
+    __decorate([
+        typeorm_1.OneToMany(function () { return notificacion_1.notificacion; }, function (notificacion_id) { return notificacion_id.user_id; })
+    ], user.prototype, "notificacion");
     user = __decorate([
         typeorm_1.Entity("user"),
         typeorm_1.Unique(["usuario", "email"])

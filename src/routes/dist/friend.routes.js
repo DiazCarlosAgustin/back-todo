@@ -1,13 +1,13 @@
 "use strict";
 exports.__esModule = true;
 var express_1 = require("express");
-var todoController_1 = require("../controllers/todoController");
+var friendsController_1 = require("../controllers/friendsController");
 var authController_1 = require("../controllers/authController");
 var router = express_1.Router();
 router.use(authController_1.isLog);
-router.route("/")
-    .put(todoController_1.updateTodo)
-    .post(todoController_1.addTodo);
 router.route("/:id")
-    .get(todoController_1.getTodosByUser)["delete"](todoController_1.deleteTodo);
+    .get(friendsController_1.getFriends)
+    .post(friendsController_1.updateSolicitud);
+router.route("/")
+    .post(friendsController_1.addFriend);
 exports["default"] = router;

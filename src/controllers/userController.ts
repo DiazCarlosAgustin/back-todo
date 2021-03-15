@@ -133,3 +133,18 @@ export async function getUsersToAdd(req: Request, res: Response): Promise<any> {
     }
 
 }
+
+export async function getNombreUsuario(id: number): Promise<any> {
+    try {
+        const userName = await getRepository(user)
+            .createQueryBuilder("user")
+            .select("user.usuario")
+            .where("user.id = :id", { id })
+            .getMany()
+        return userName[0].usuario
+    }
+    catch (err) {
+        console.log(err);
+
+    }
+}
