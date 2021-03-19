@@ -93,13 +93,15 @@ export async function addFriend(req: Request, res: Response): Promise<any> {
  * @param res 
  */
 export async function updateSolicitud(req: Request, res: Response): Promise<any> {
-    try {
-        const { id } = req.params
+    console.log(req.body);
 
+    try {
+        let { user_id, friend_id, aceptado } = req.body
         await getRepository(friend)
             .createQueryBuilder("friend")
             .update(req.body)
-            .where("id = :id", { id })
+            .where("user_id = :id", { user_id })
+            .where("friend_id = :id", { id: friend_id })
             .execute()
             .then(result => {
                 if (result.raw.affectedRows > 0 && result.raw.warningCount === 0) {

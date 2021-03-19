@@ -155,16 +155,20 @@ exports.addFriend = addFriend;
  */
 function updateSolicitud(req, res) {
     return __awaiter(this, void 0, Promise, function () {
-        var id, error_3;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, user_id, friend_id, aceptado, error_3;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    id = req.params.id;
+                    console.log(req.body);
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    _a = req.body, user_id = _a.user_id, friend_id = _a.friend_id, aceptado = _a.aceptado;
                     return [4 /*yield*/, typeorm_1.getRepository(friend_1.friend)
                             .createQueryBuilder("friend")
                             .update(req.body)
-                            .where("id = :id", { id: id })
+                            .where("user_id = :id", { user_id: user_id })
+                            .where("friend_id = :id", { id: friend_id })
                             .execute()
                             .then(function (result) {
                             if (result.raw.affectedRows > 0 && result.raw.warningCount === 0) {
@@ -174,14 +178,14 @@ function updateSolicitud(req, res) {
                                 res.json({ "status": "Fail", "msg": "Algo ocurrio y no se pudo aceptar la solicitud correctamente, intent nuevamente." });
                             }
                         })];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 3];
                 case 2:
-                    error_3 = _a.sent();
+                    _b.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_3 = _b.sent();
                     res.status(400).json(error_3);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });

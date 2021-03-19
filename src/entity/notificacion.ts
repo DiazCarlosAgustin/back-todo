@@ -10,6 +10,9 @@ export class notificacion {
     @JoinColumn({ name: "user_id" })
     user_id: user;
 
+    @Column({ default: null })
+    sendBy: number
+
     @Column()
     type: string;
 

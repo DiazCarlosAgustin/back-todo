@@ -20,6 +20,9 @@ var notificacion = /** @class */ (function () {
         typeorm_1.JoinColumn({ name: "user_id" })
     ], notificacion.prototype, "user_id");
     __decorate([
+        typeorm_1.Column({ "default": null })
+    ], notificacion.prototype, "sendBy");
+    __decorate([
         typeorm_1.Column()
     ], notificacion.prototype, "type");
     __decorate([

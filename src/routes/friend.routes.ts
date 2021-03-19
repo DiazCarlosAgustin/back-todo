@@ -7,8 +7,10 @@ const router = Router()
 router.use(isLog);
 router.route("/:id")
     .get(getFriends)
-    .post(updateSolicitud)
+
 router.route("/")
     .post(addFriend)
+    .put(updateSolicitud)
+
 
 export default router

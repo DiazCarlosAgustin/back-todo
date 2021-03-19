@@ -52,7 +52,8 @@ function getNotificaciones(req, res) {
                             .find({
                             relations: ["user_id"],
                             where: {
-                                user_id: id
+                                user_id: id,
+                                status: 0
                             },
                             order: { id: "DESC" }
                         })

@@ -6,8 +6,8 @@ var authController_1 = require("../controllers/authController");
 var router = express_1.Router();
 router.use(authController_1.isLog);
 router.route("/:id")
-    .get(friendsController_1.getFriends)
-    .post(friendsController_1.updateSolicitud);
+    .get(friendsController_1.getFriends);
 router.route("/")
-    .post(friendsController_1.addFriend);
+    .post(friendsController_1.addFriend)
+    .put(friendsController_1.updateSolicitud);
 exports["default"] = router;
